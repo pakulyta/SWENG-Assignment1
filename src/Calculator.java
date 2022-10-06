@@ -34,55 +34,68 @@ public class Calculator {
                 quit = true;
             }
             else {
-                ArrayList<String> mathExp = nums_ops(expIn);
-                // validate string
-                // perform calculation
-                // output result
+                String mathExp = nums_ops(expIn);
+                if (!mathExp.equals("ERROR")){
+                    System.out.println("Valid expression, performing calculation.\n");
+                    // perform calculation
+                    // output result
+                }
+                else {
+                    System.out.println("Error: Please enter a valid expression!");
+                    System.out.println("A valid string consists of numbers followed by one of the available operators.\n");
+                }
             }
         }
     }
 
     /**
-     * Changes the given expression into numbers and operators
-     * @param expIn : expression to be converted
+     * Validates and changes a string into a mathematical expression
+     * @param expIn : User input to be validated
+     * @return String expression to be evaluated || ERROR is string is invalid
      */
-    private static ArrayList<String> nums_ops(String expIn) {
-        char[] chars = expIn.toCharArray();
+    private static String nums_ops(String expIn) {
         ArrayList<String> expression = new ArrayList<>();
-        String number = "";
+        String digit = "";
+        int i = 0;
 
-        for (int i = 0; i < chars.length; i++){
-            int j = -1;
-            if (chars[i] >= '0' && chars[i] <= '9'){
-                number += chars[i];
+        while (i < expIn.length()){
+            if (isNumber(expIn.charAt(i))){
+                while (i < expIn.length() && isNumber(expIn.charAt(i))){
+                    digit += expIn.charAt(i);
+                    i++;
+                }
+                expression.add(digit);
             }
-            else if (chars[i] == '+' || chars[i] == '-' || chars[i] == '*'){
-                expression.add(number);
-                expression.add(String.valueOf(chars[i]));
-                number = "";
+            else if (isOperand(expIn.charAt(i))){
+                expression.add(String.valueOf(expIn.charAt(i)));
+                i++;
+                if (isOperand(expIn.charAt(i))){
+                    return "ERROR";
+                }
             }
-            if (i == chars.length-1 && !number.equals("")){
-                expression.add(number);
+            else if (!isNumber(expIn.charAt(i)) && !isOperand(expIn.charAt(i))){
+                    return "ERROR";
             }
         }
-        return expression;
+        return expression.toString();
     }
+
     /**
-     * Checks if expression is valid, only numbers and no duplicate operators
-     * @param expIn : expression to be validated
-     * @return 1 if expression is valid, 0 if expression is not valid
+     * Checks if a character is a valid operator
+     * @param op : char to be checked
+     * @return true if valid, false otherwise
      */
-    private static boolean validateExp(String expIn){
-        String[] chars = expIn.split("");
+    private static boolean isOperand(char op) {
+        return op == '+' || op == '-' || op == '*';
+    }
 
-        for (String character : chars){
-            if (Integer.parseInt(character) < 0 || Integer.parseInt(character) > 9
-                || !character.equals("+") || !character.equals("-") || !character.equals("*")){
-                return false;
-            }
-
-        }
-        return true;
+    /**
+     * Checks if a character is a number
+     * @param num : char to be checked
+     * @return true if valid, false otherwise
+     */
+    private static boolean isNumber(char num) {
+        return num >= '0' && num <= '9';
     }
 
 }
