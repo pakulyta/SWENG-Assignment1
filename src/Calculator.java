@@ -3,7 +3,7 @@ import java.util.Scanner;
 import java.util.Stack;
 
 /**
- * SWENG Assignment 1 - Group 38
+ * SWENG Assignment 1 - Group 38 [Austeja Pakulyte]
  * Simple calculator app which takes in an inputted mathematical expression and returns the result of the expression
  */
 public class Calculator {
@@ -39,11 +39,13 @@ public class Calculator {
             }
             else {
                 ArrayList<String> mathExp = nums_ops(expIn);
+                // valid input
                 if (!mathExp.get(0).equals("-1")){
                     System.out.println("Valid expression, performing calculation.\n");
                     String result = calculation(mathExp);
                     System.out.println("The result of your calculation is : " + result + "\n");
                 }
+                // invalid input
                 else {
                     System.out.println("Error: Please enter a valid expression!");
                     System.out.println("A valid string consists of numbers followed by one of the available operators.\n");
@@ -64,22 +66,30 @@ public class Calculator {
         String op = "";
 
         for (String temp : mathExp) {
+            // if temp is an operand, push to stack
             if (isNumberString(temp)) {
                 nums.push(temp);
-            } else if (isOperandString(temp)) {
+            }
+            // if temp is an operator
+            else if (isOperatorString(temp)) {
+                // empty stack || precedence greater than stack top -> push to stack
                 if (ops.empty() || precedence(ops.peek()) < precedence(temp)) {
                     ops.push(temp);
-                } else if (precedence(ops.peek()) >= precedence(temp)) {
+                }
+                // precedence lower || equal to stack top -> evaluate current expression in stack
+                else if (precedence(ops.peek()) >= precedence(temp)) {
                     while (!ops.empty() && precedence(ops.peek()) >= precedence(temp)) {
                         val2 = nums.pop();
                         val1 = nums.pop();
                         op = ops.pop();
                         nums.push(performOperation(val1, val2, op));
                     }
+                    // push current operator to stack
                     ops.push(temp);
                 }
             }
         }
+        // finish evaluating expression in stack
         while (!nums.empty() && !ops.empty()){
             val2 = nums.pop();
             val1 = nums.pop();
@@ -87,7 +97,6 @@ public class Calculator {
             result = performOperation(val1, val2, op);
             nums.push(result);
         }
-
         return result;
     }
 
@@ -101,16 +110,21 @@ public class Calculator {
         return Integer.toString(result);
     }
 
-
+    /**
+     * Gets the precedence of an operator (* > + || -)
+     * @param op : operator to be checked
+     * @return : int presentation of operator's precedence
+     */
     private static int precedence(String op) {
         if (op.equals("+") || op.equals("-")) return 1;
         if (op.equals("*")) return 2;
         return -1;
     }
+
     /**
      * Validates and changes a string into a mathematical expression
      * @param expIn : User input to be validated
-     * @return String expression to be evaluated || ERROR is string is invalid
+     * @return Arraylist of expression to be computed || -1 if string is invalid
      */
     private static ArrayList<String> nums_ops(String expIn) {
         ArrayList<String> expression = new ArrayList<>();
@@ -126,20 +140,24 @@ public class Calculator {
                 expression.add(digit);
                 digit = "";
             }
-            else if (isOperandChar(expIn.charAt(i))){
+            else if (isOperatorChar(expIn.charAt(i))){
                 expression.add(String.valueOf(expIn.charAt(i)));
                 i++;
-                if (isOperandChar(expIn.charAt(i))){
+                if (i >= expIn.length() || isOperatorChar(expIn.charAt(i))){
                     expression.clear();
                     expression.add("-1");
                     return expression;
                 }
             }
-            else if (!isNumberChar(expIn.charAt(i)) && !isOperandChar(expIn.charAt(i))){
+            else if (!isNumberChar(expIn.charAt(i)) && !isOperatorChar(expIn.charAt(i))){
                 expression.clear();
                 expression.add("-1");
                 return expression;
             }
+        }
+        if (expression.size() <= 2) {
+            expression.clear();
+            expression.add("-1");
         }
         return expression;
     }
@@ -149,7 +167,7 @@ public class Calculator {
      * @param op : char to be checked
      * @return true if valid, false otherwise
      */
-    private static boolean isOperandChar(char op) {
+    private static boolean isOperatorChar(char op) {
         return op == '+' || op == '-' || op == '*';
     }
 
@@ -158,7 +176,7 @@ public class Calculator {
      * @param op : String to be checked
      * @return true if valid, false otherwise
      */
-    private static boolean isOperandString(String op) {
+    private static boolean isOperatorString(String op) {
         return op.equals("+") || op.equals("-") || op.equals("*");
     }
 
