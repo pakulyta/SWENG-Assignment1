@@ -59,7 +59,7 @@ public class Calculator {
      * @param mathExp : String to be evaluated
      * @return String of result
      */
-    private static String calculation(ArrayList<String> mathExp) {
+    public static String calculation(ArrayList<String> mathExp) {
         String result = "";
         String val1 = "";
         String val2 = "";
@@ -126,7 +126,7 @@ public class Calculator {
      * @param expIn : User input to be validated
      * @return Arraylist of expression to be computed || -1 if string is invalid
      */
-    private static ArrayList<String> nums_ops(String expIn) {
+    public static ArrayList<String> nums_ops(String expIn) {
         ArrayList<String> expression = new ArrayList<>();
         String digit = "";
         int i = 0;
