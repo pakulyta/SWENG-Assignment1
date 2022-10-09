@@ -79,8 +79,5 @@ class CalculatorTest {
 
         testOut = Calculator.calculation(testInput);
         assertEquals("8",testOut,"Longer valid input calculation is wrong.");
-
-
-
     }
 }
