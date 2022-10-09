@@ -26,7 +26,7 @@ public class Calculator {
                   Welcome to the Calculator app!
                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~""");
 
-        //program runs until user wishes to quit
+        // program runs until user wishes to quit
         while (!quit){
             System.out.println(operations);
             System.out.println("Please enter your mathematical expression:");
@@ -100,6 +100,13 @@ public class Calculator {
         return result;
     }
 
+    /**
+     * Method to perform actual calculation using Integers
+     * @param val1 : first operand
+     * @param val2 : second operand
+     * @param op : operator
+     * @return : String representation of mathematical result
+     */
     private static String performOperation(String val1, String val2, String op) {
         int result = switch (op) {
             case "+" -> Integer.parseInt(val1) + Integer.parseInt(val2);
